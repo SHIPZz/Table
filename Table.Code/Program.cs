@@ -4,6 +4,7 @@ using Amulet.Input;
 using Amulet.InventorySystem;
 using Amulet.InventorySystem.Printer;
 using Amulet.ItemSystem;
+using Amulet.Logger;
 
 namespace Amulet;
 
@@ -16,7 +17,6 @@ public class Program
     private readonly IInputController _inputController;
     private readonly ILogger _logger;
     private readonly IInputService _inputService;
-    
     private readonly ICommandDispatcher _dispatcher;
 
     public Program()

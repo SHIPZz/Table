@@ -1,6 +1,6 @@
-using Amulet.Configs;
 using Amulet.InventorySystem;
 using Amulet.ItemSystem;
+using Amulet.Logger;
 
 namespace Amulet.Commands;
 

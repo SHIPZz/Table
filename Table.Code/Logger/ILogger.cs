@@ -1,4 +1,4 @@
-namespace Amulet.Configs;
+namespace Amulet.Logger;
 
 public interface ILogger
 {

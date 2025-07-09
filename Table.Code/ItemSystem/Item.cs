@@ -13,14 +13,14 @@ public class Item : IPrototype<Item>
         Amount = amount;
     }
 
-    public void AddAmount(int delta)
+    public void Add(int amount)
     {
-        Amount = Math.Clamp(Amount + delta, 0, int.MaxValue);
+        Amount = Math.Clamp(Amount + amount, 0, Constants.ItemAmountCapacity);
     }
     
-    public void RemoveAmount(int delta)
+    public void Remove(int amount)
     {
-        Amount = Math.Clamp(Amount - delta, 0, int.MaxValue);
+        Amount = Math.Clamp(Amount - amount, 0, Constants.ItemAmountCapacity);
     }
 
     public bool Empty() => Amount <= 0;

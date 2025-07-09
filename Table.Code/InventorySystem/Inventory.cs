@@ -1,17 +1,18 @@
-﻿using Amulet.ItemSystem;
+﻿using Amulet.Common;
+using Amulet.ItemSystem;
 
 namespace Amulet.InventorySystem;
 
 public class Inventory : IInventory
 {
-    private readonly Dictionary<ItemType, Item> _items = new();
+    private readonly Dictionary<ItemType, Item> _items = new(Constants.InventoryCapacity);
 
     public IReadOnlyCollection<Item> Items => _items.Values;
 
     public void Add(Item item)
     {
         if (_items.TryGetValue(item.Type, out var targetItem))
-            targetItem.AddAmount(item.Amount);
+            targetItem.Add(item.Amount);
         else
             _items[item.Type] = item.Clone();
     }
@@ -23,7 +24,7 @@ public class Inventory : IInventory
         
         if (targetItem.Amount >= amount)
         {
-            targetItem.RemoveAmount(amount);
+            targetItem.Remove(amount);
 
             if (targetItem.Empty())
                 _items.Remove(type);

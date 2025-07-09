@@ -3,6 +3,7 @@ using Amulet.ItemSystem;
 using System;
 using Amulet.Commands;
 using Amulet.Configs;
+using Amulet.Logger;
 
 namespace Amulet.Commands;
 

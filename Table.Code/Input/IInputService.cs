@@ -2,7 +2,7 @@
 
 public interface IInputService : IDisposable
 {
-    string? ReadLine();
     event Action<string?>? InputReceived;
+    string? ReadLine();
     void StartInputLoop();
 }

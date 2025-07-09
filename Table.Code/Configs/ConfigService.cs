@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Amulet.ItemSystem;
+using Amulet.Logger;
 
 namespace Amulet.Configs;
 

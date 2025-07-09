@@ -1,4 +1,4 @@
-using Amulet.Configs;
+using Amulet.Logger;
 
 namespace Amulet.Commands;
 

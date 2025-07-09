@@ -1,4 +1,4 @@
-using Amulet.Configs;
+using Amulet.Logger;
 
 namespace Amulet.Commands;
 
@@ -59,9 +59,8 @@ public class CommandDispatcher : ICommandDispatcher
     public void PrintMenu()
     {
         _logger.LogInfo("\nВыберите команду:");
-        for (int i = 0; i < _menu.Count; i++)
-        {
+        
+        for (int i = 0; i < _menu.Count; i++) 
             _logger.LogInfo($"{i + 1}. {_menu[i].Description}");
-        }
     }
 }

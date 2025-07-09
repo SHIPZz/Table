@@ -1,6 +1,7 @@
 using Amulet.ItemSystem;
 using Amulet.Commands;
 using Amulet.Configs;
+using Amulet.Logger;
 
 namespace Amulet.Input;
 
@@ -78,8 +79,6 @@ public class InputController : IInputController, IDisposable
         {
             Dispose();
 
-            Environment.Exit(0);
-            
             return true;
         }
 

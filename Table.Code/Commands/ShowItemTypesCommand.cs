@@ -1,5 +1,5 @@
-﻿using Amulet.Configs;
-using Amulet.ItemSystem;
+﻿using Amulet.ItemSystem;
+using Amulet.Logger;
 
 namespace Amulet.Commands;
 
