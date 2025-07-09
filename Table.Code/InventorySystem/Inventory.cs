@@ -20,18 +20,17 @@ public class Inventory : IInventory
     public bool TryRemoveItem(ItemType type, int amount)
     {
         if (!_items.TryGetValue(type, out var targetItem))
-            return false; 
+            return false;
+
+        if (targetItem.Amount < amount)
+            return false;
         
-        if (targetItem.Amount >= amount)
-        {
-            targetItem.Remove(amount);
+        targetItem.Remove(amount);
 
-            if (targetItem.Empty())
-                _items.Remove(type);
+        if (targetItem.Empty())
+            _items.Remove(type);
 
-            return true;
-        }
+        return true;
 
-        return false;
     }
 }
