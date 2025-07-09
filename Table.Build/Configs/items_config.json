@@ -1,0 +1,7 @@
+{
+  "Items": [
+    { "Type": "Amulet", "Amount": 1 },
+    { "Type": "Book", "Amount": 1 },
+    { "Type": "Coin", "Amount": 33 }
+  ]
+} 
