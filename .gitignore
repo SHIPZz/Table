@@ -26,9 +26,10 @@
 *.a
 *.lib
 
-.idea
+.idea/
+bin/
+obj/
 
 # Executables
-*.exe
 *.out
 *.app

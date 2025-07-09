@@ -1,4 +1,6 @@
-﻿namespace Amulet.ItemSystem;
+﻿using Amulet.Common;
+
+namespace Amulet.ItemSystem;
 
 public class Item : IPrototype<Item>
 {
@@ -14,6 +16,11 @@ public class Item : IPrototype<Item>
     public void AddAmount(int delta)
     {
         Amount = Math.Clamp(Amount + delta, 0, int.MaxValue);
+    }
+    
+    public void RemoveAmount(int delta)
+    {
+        Amount = Math.Clamp(Amount - delta, 0, int.MaxValue);
     }
 
     public bool Empty() => Amount <= 0;

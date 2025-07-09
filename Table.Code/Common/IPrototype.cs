@@ -1,4 +1,4 @@
-﻿namespace Amulet.ItemSystem;
+﻿namespace Amulet.Common;
 
 public interface IPrototype<T>
 {

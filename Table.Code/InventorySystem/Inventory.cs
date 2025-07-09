@@ -16,17 +16,14 @@ public class Inventory : IInventory
             _items[item.Type] = item.Clone();
     }
 
-    public bool TryRemoveItem(ItemType type, int amount, out Item? removedItem)
+    public bool TryRemoveItem(ItemType type, int amount)
     {
-        removedItem = null;
-
         if (!_items.TryGetValue(type, out var targetItem))
             return false; 
         
         if (targetItem.Amount >= amount)
         {
-            removedItem = new Item(type, amount);
-            targetItem.AddAmount(-amount);
+            targetItem.RemoveAmount(amount);
 
             if (targetItem.Empty())
                 _items.Remove(type);

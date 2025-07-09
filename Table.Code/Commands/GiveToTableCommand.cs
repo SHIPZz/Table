@@ -21,9 +21,9 @@ public class GiveToTableCommand : ICommand<ItemEntry>
     
     public void Execute(ItemEntry args)
     {
-        if (_heroInventory.TryRemoveItem(args.Type, args.Amount, out Item? given))
+        if (_heroInventory.TryRemoveItem(args.Type, args.Amount))
         {
-            _tableInventory.Add(given);
+            _tableInventory.Add(new Item(args.Type, args.Amount));
             _logger.LogInfo($"Герой положил на стол: {args.Type} - {args.Amount} шт.");
             return;
         }

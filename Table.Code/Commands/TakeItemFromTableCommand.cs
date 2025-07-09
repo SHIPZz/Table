@@ -19,10 +19,11 @@ public class TakeItemFromTableCommand : ICommand<ItemEntry>
     
     public void Execute(ItemEntry args)
     {
-        if (_tableInventory.TryRemoveItem(args.Type, args.Amount, out Item? taken))
+        if (_tableInventory.TryRemoveItem(args.Type, args.Amount))
         {
-            _heroInventory.Add(taken!);
-            _logger.LogDebug($"Герой взял: {taken}");
+            Item item = new Item(args.Type, args.Amount);
+            _heroInventory.Add(item);
+            _logger.LogDebug($"Герой взял: {item}");
         }
         else
         {

@@ -2,7 +2,7 @@ using Amulet.Configs;
 
 namespace Amulet.Commands;
 
-public class CommandDispatcher
+public class CommandDispatcher : ICommandDispatcher
 {
     private readonly Dictionary<string, ICommand> _commands = new();
     private readonly Dictionary<string, object> _paramCommands = new();
@@ -12,10 +12,12 @@ public class CommandDispatcher
     public CommandDispatcher(Dictionary<string, string> descriptions, ILogger logger)
     {
         _logger = logger;
+
         foreach (var pair in descriptions)
         {
             if (pair.Key == CommandNames.Empty)
                 continue;
+            
             _menu.Add((pair.Key, pair.Value));
         }
     }

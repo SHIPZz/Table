@@ -13,11 +13,11 @@ public class Program
     private readonly IInventory _heroInventory;
     private readonly IInventory _tableInventory;
     private readonly IInventoryPrinter _printer;
-    private readonly InputController _inputController;
+    private readonly IInputController _inputController;
     private readonly ILogger _logger;
     private readonly IInputService _inputService;
     
-    private readonly CommandDispatcher _dispatcher;
+    private readonly ICommandDispatcher _dispatcher;
 
     public Program()
     {
@@ -65,6 +65,7 @@ public class Program
 
     private void BindCommands()
     {
+        _dispatcher.Register(CommandNames.ShowItemTypes, new ShowItemTypesCommand(_logger,_configService.AllItemTypes.ToList()));
         _dispatcher.Register(CommandNames.AddToHero, new AddItemToInventoryCommand(_heroInventory));
         _dispatcher.Register(CommandNames.TakeFromTable, new TakeItemFromTableCommand(_heroInventory, _tableInventory, _logger));
         _dispatcher.Register(CommandNames.GiveToTable, new GiveToTableCommand(_heroInventory, _tableInventory, _logger));

@@ -1,9 +1,8 @@
-﻿using Amulet.ItemSystem;
+﻿namespace Amulet.Input;
 
-namespace Amulet.Input;
-
-public interface IInputService
+public interface IInputService : IDisposable
 {
     string? ReadLine();
-    int ReadInt();
+    event Action<string?>? InputReceived;
+    void StartInputLoop();
 }

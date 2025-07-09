@@ -2,6 +2,30 @@ namespace Amulet.Input;
 
 public class ConsoleInputService : IInputService
 {
-    public string? ReadLine() => Console.ReadLine();
-    public int ReadInt() => int.Parse(Console.ReadLine() ?? string.Empty);
+    public event Action<string?>? InputReceived;
+    
+    private bool _isRunning;
+    
+    public string? ReadLine()
+    {
+        var input = Console.ReadLine();
+        return input;
+    }
+    
+    public void StartInputLoop()
+    {
+        _isRunning = true;
+        
+        while (_isRunning)
+        {
+            var input = Console.ReadLine();
+            InputReceived?.Invoke(input);
+        }
+    }
+    
+    public void Dispose()
+    {
+        _isRunning = false;
+        InputReceived = null;
+    }
 }

@@ -1,5 +1,3 @@
-using System;
-
 namespace Amulet.Configs;
 
 public class ConsoleLogger : ILogger
