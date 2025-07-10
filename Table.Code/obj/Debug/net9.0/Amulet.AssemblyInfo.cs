@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Amulet")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+38e278ba389cac8d11b216bd7302b9baaf7e13c6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9f70ff1c88e9ec3316d7bb995a2264989f009f43")]
 [assembly: System.Reflection.AssemblyProductAttribute("Amulet")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Amulet")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -4,7 +4,7 @@ using Amulet.Logger;
 
 namespace Amulet.Commands;
 
-[Command(CommandNames.AddToHero, "Добавить предмет герою")]
+[Command(CommandNames.AddToHero, "Добавить предмет герою", 30)]
 public class AddItemToInventoryCommand : ICommand
 {
     private readonly IInventory _heroInventory;

@@ -4,7 +4,7 @@ using Amulet.Logger;
 
 namespace Amulet.Commands;
 
-[Command(CommandNames.TakeFromTable, "Взять предмет со стола")]
+[Command(CommandNames.TakeFromTable, "Взять предмет со стола", 50)]
 public class TakeItemFromTableCommand : ICommand
 {
     private readonly IInventory _heroInventory;

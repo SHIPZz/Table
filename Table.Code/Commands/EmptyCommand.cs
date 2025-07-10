@@ -2,7 +2,7 @@
 
 namespace Amulet.Commands;
 
-[Command(CommandNames.Empty, "Пустая команда")]
+[Command(CommandNames.Empty, "Пустая команда", 90)]
 public class EmptyCommand : ICommand
 {
     private readonly ILogger _logger;

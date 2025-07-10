@@ -7,6 +7,7 @@ public class CommandDispatcher : ICommandDispatcher
 {
     private readonly Dictionary<string, ICommand> _commands = new();
     private readonly Dictionary<string, string> _descriptions = new();
+    private readonly Dictionary<string, int> _priorities = new();
     private readonly ILogger _logger;
     private readonly ICommandFactory _commandFactory;
 
@@ -17,9 +18,10 @@ public class CommandDispatcher : ICommandDispatcher
         RegisterCommandsFromAssembly();
     }
 
-    public void Register(string key, ICommand command, string description = "")
+    public void Register(string key, ICommand command, string description = "", int priority = 0)
     {
         _commands[key] = command;
+        _priorities[key] = priority;
 
         if (!string.IsNullOrEmpty(description))
             _descriptions[key] = description;
@@ -46,29 +48,50 @@ public class CommandDispatcher : ICommandDispatcher
 
     public string GetCommandKeyByIndex(int commandIndex)
     {
-        var commands = _descriptions.Keys;
-        
-        if (commandIndex >= 0 && commandIndex < commands.Count)
-            return commands.ElementAt(commandIndex);
-        
-        return CommandNames.Empty;
+        if (commandIndex < 0)
+            return CommandNames.Empty;
+            
+        try
+        {
+            return GetSortedCommands().ElementAt(commandIndex);
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+            return CommandNames.Empty;
+        }
     }
 
     public void PrintMenu()
     {
         _logger.LogInfo("\nВыберите команду:");
         
-        Dictionary<string, string> commands = _descriptions;
+        var sortedCommands = GetSortedCommands();
+        int i = 1;
         
-        for (int i = 0; i < commands.Values.Count; i++) 
-            _logger.LogInfo($"{i + 1}. {commands.ElementAt(i)}");
+        foreach (var commandName in sortedCommands)
+        {
+            if (commandName == CommandNames.Empty)
+                continue;
+            
+            if (_descriptions.TryGetValue(commandName, out var description))
+            {
+                _logger.LogInfo($"{i} - {description}");
+                i++;
+            }
+        }
+    }
+
+    private IEnumerable<string> GetSortedCommands()
+    {
+        return _descriptions.Keys
+            .OrderBy(key => _priorities.GetValueOrDefault(key, 0));
     }
 
     private void RegisterCommandsFromAssembly()
     {
         var assembly = Assembly.GetExecutingAssembly();
         var commandTypes = assembly.GetTypes()
-            .Where(t => typeof(ICommand).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
+            .Where(t => typeof(ICommand).IsAssignableFrom(t) && t is { IsInterface: false, IsAbstract: false })
             .Where(t => t.GetCustomAttribute<CommandAttribute>() != null);
 
         foreach (var commandType in commandTypes)
@@ -79,7 +102,7 @@ public class CommandDispatcher : ICommandDispatcher
             try
             {
                 var command = _commandFactory.CreateCommand(commandType);
-                Register(attribute.Name, command, attribute.Description);
+                Register(attribute.Name, command, attribute.Description, attribute.Priority);
             }
             catch (Exception ex)
             {

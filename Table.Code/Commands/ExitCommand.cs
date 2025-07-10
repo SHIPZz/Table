@@ -3,7 +3,7 @@ using Amulet.Logger;
 
 namespace Amulet.Commands;
 
-[Command(CommandNames.Exit, "Выход")]
+[Command(CommandNames.Exit, "Выход", 100)]
 public class ExitCommand : ICommand
 {
     private readonly ILogger _logger;

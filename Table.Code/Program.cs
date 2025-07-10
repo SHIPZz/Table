@@ -58,6 +58,7 @@ public class Program
             }
         }
 
+        _inputController.Initialize();
         _dispatcher.PrintMenu();
         _inputService.StartInputLoop();
     }

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace Amulet.Commands;
 
-[Command(CommandNames.GiveToTable, "Положить предмет на стол")]
+[Command(CommandNames.GiveToTable, "Положить предмет на стол", 40)]
 public class GiveToTableCommand : ICommand
 {
     private readonly IInventory _heroInventory;

@@ -14,6 +14,10 @@ public class InputController : IInputController, IDisposable
         _inputService = inputService;
         _dispatcher = dispatcher;
         _logger = logger;
+    }
+
+    public void Initialize()
+    {
         _inputService.InputReceived += OnInputReceived;
     }
 
