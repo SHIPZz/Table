@@ -1,4 +1,3 @@
-using Amulet.ItemSystem;
 using Amulet.Commands;
 using Amulet.Logger;
 
@@ -6,15 +5,12 @@ namespace Amulet.Input;
 
 public class InputController : IInputController, IDisposable
 {
-    private readonly List<ItemType>? _itemTypes;
     private readonly IInputService _inputService;
     private readonly ICommandDispatcher _dispatcher;
     private readonly ILogger _logger;
 
-    public InputController(List<ItemType> itemTypes, IInputService inputService, ICommandDispatcher dispatcher,
-        ILogger logger)
+    public InputController(IInputService inputService, ICommandDispatcher dispatcher, ILogger logger)
     {
-        _itemTypes = itemTypes;
         _inputService = inputService;
         _dispatcher = dispatcher;
         _logger = logger;
@@ -24,13 +20,6 @@ public class InputController : IInputController, IDisposable
     public void Dispose()
     {
         _inputService.InputReceived -= OnInputReceived;
-        _inputService.Dispose();
-    }
-
-    public void ShowCommandMenuAndExecute()
-    {
-        _dispatcher.PrintMenu();
-        _inputService.StartInputLoop();
     }
 
     private void OnInputReceived(string? input)
@@ -51,10 +40,12 @@ public class InputController : IInputController, IDisposable
         if (TryExitOnExitCommand(commandName))
             return;
 
-        if (TryExecuteCommandsWithParameters(commandName))
-            return;
+        string? args = null;
+        
+        if (NeedsParameters(commandName)) 
+            args = ReadCommandParameters();
 
-        _dispatcher.Execute(commandName);
+        _dispatcher.Execute(commandName, args);
         _dispatcher.PrintMenu();
         _logger.LogInfo("> ");
     }
@@ -77,46 +68,29 @@ public class InputController : IInputController, IDisposable
         if (commandName == CommandNames.Exit)
         {
             Dispose();
-
             return true;
         }
 
         return false;
     }
 
-    private bool TryExecuteCommandsWithParameters(string? commandName)
+    private bool NeedsParameters(string commandName)
     {
-        switch (commandName)
-        {
-            case CommandNames.AddToHero or CommandNames.GiveToTable or CommandNames.TakeFromTable:
-            {
-                _dispatcher.Execute(CommandNames.ShowItemTypes);
-
-                if (TryReadItemSelectInput(out ItemEntry entry))
-                {
-                    _dispatcher.Execute(commandName, entry);
-                    _dispatcher.PrintMenu();
-                }
-
-                return true;
-            }
-
-            default:
-                return false;
-        }
+        return commandName is CommandNames.AddToHero or CommandNames.GiveToTable or CommandNames.TakeFromTable;
     }
 
-    private bool TryReadItemSelectInput(out ItemEntry entry)
+    private string? ReadCommandParameters()
     {
-        entry = new ItemEntry();
-
-        if (!int.TryParse(_inputService.ReadLine(), out int itemIndex) || itemIndex < 1 || itemIndex > _itemTypes.Count)
+        _dispatcher.Execute(CommandNames.ShowItemTypes);
+        
+        _logger.LogInfo("Введите тип предмета:");
+        _logger.LogInfo("> ");
+        
+        if (!int.TryParse(_inputService.ReadLine(), out int itemIndex) || itemIndex < 1)
         {
             _logger.LogError("Неверный тип предмета.");
-            return false;
+            return null;
         }
-
-        entry.Type = _itemTypes[itemIndex - 1];
 
         _logger.LogInfo("Введите количество:");
         _logger.LogInfo("> ");
@@ -124,11 +98,9 @@ public class InputController : IInputController, IDisposable
         if (!int.TryParse(_inputService.ReadLine(), out int amount) || amount <= 0)
         {
             _logger.LogError("Неверное количество.");
-            return false;
+            return null;
         }
 
-        entry.Amount = amount;
-
-        return true;
+        return $"{itemIndex} {amount}";
     }
 }

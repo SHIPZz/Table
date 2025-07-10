@@ -3,6 +3,7 @@ using Amulet.InventorySystem.Printer;
 
 namespace Amulet.Commands;
 
+[Command(CommandNames.ShowInventories, "Показать инвентари")]
 public class ShowInventoriesCommand : ICommand
 {
     private readonly IInventory _heroInventory;
@@ -16,7 +17,7 @@ public class ShowInventoriesCommand : ICommand
         _printer = printer;
     }
 
-    public void Execute()
+    public void Execute(string? args = null)
     {
         _printer.Print(_heroInventory, "Hero");
         _printer.Print(_tableInventory, "Table");

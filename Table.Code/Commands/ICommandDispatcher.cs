@@ -2,10 +2,7 @@
 
 public interface ICommandDispatcher
 {
-    void Register(string key, ICommand command);
-    void Register<TArgs>(string key, ICommand<TArgs> command);
-    void Execute(string key);
-    void Execute<TArgs>(string key, TArgs args);
+    void Execute(string key, string? args = null);
     string GetCommandKeyByIndex(int commandIndex);
     void PrintMenu();
 }

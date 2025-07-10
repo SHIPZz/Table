@@ -4,30 +4,36 @@ using Amulet.Logger;
 
 namespace Amulet.Commands;
 
-public class TakeItemFromTableCommand : ICommand<ItemEntry>
+[Command(CommandNames.TakeFromTable, "Взять предмет со стола")]
+public class TakeItemFromTableCommand : ICommand
 {
     private readonly IInventory _heroInventory;
     private readonly IInventory _tableInventory;
+    private readonly List<ItemType> _itemTypes;
     private readonly ILogger _logger;
 
-    public TakeItemFromTableCommand(IInventory heroInventory, IInventory tableInventory, ILogger logger)
+    public TakeItemFromTableCommand(IInventory heroInventory, IInventory tableInventory, List<ItemType> itemTypes, ILogger logger)
     {
         _logger = logger;
         _heroInventory = heroInventory;
         _tableInventory = tableInventory;
+        _itemTypes = itemTypes;
     }
     
-    public void Execute(ItemEntry args)
+    public void Execute(string? args = null)
     {
-        if (_tableInventory.TryRemoveItem(args.Type, args.Amount))
+        if (CommandParser.TryParseItemEntry(args, _itemTypes, _logger, out ItemEntry entry))
         {
-            Item item = new Item(args.Type, args.Amount);
-            _heroInventory.Add(item);
-            _logger.LogDebug($"Герой взял: {item}");
-        }
-        else
-        {
-            _logger.LogError("На столе нет такого количества предметов.");
+            if (_tableInventory.TryRemoveItem(entry.Type, entry.Amount))
+            {
+                Item item = new Item(entry.Type, entry.Amount);
+                _heroInventory.Add(item);
+                _logger.LogInfo($"Герой взял: {entry.Type} - {entry.Amount} шт.");
+            }
+            else
+            {
+                _logger.LogError("На столе нет такого количества предметов.");
+            }
         }
     }
 }

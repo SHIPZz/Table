@@ -3,6 +3,7 @@ using Amulet.Logger;
 
 namespace Amulet.Commands;
 
+[Command(CommandNames.ShowItemTypes, "Показать типы предметов")]
 public class ShowItemTypesCommand : ICommand
 {
     private readonly ILogger _logger;
@@ -14,7 +15,7 @@ public class ShowItemTypesCommand : ICommand
         _logger = logger;
     }
 
-    public void Execute()
+    public void Execute(string? args = null)
     {
         _logger.LogInfo("Выберите тип предмета:");
         

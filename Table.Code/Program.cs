@@ -28,19 +28,19 @@ public class Program
         _printer = new InventoryPrinter(_logger);
         _inputService = new ConsoleInputService();
         
-        _dispatcher = new CommandDispatcher(new Dictionary<string, string>
-        {
-            { CommandNames.AddToHero, "Добавить предмет герою" },
-            { CommandNames.TakeFromTable, "Взять предмет со стола" },
-            { CommandNames.GiveToTable, "Положить предмет на стол" },
-            { CommandNames.ShowInventories, "Показать инвентари" },
-            { CommandNames.Exit, "Выход" },
-            { CommandNames.Empty, "Пустая команда" }
-        }, _logger);
-        
         _configService.LoadTableConfig();
         
-        _inputController = new InputController(_configService.AllItemTypes.ToList(), _inputService, _dispatcher, _logger);
+        var commandFactory = new CommandFactory(
+            _heroInventory, 
+            _tableInventory, 
+            _configService.AllItemTypes.ToList(), 
+            _logger, 
+            _printer, 
+            _inputService);
+        
+        _dispatcher = new CommandDispatcher(_logger, commandFactory);
+        
+        _inputController = new InputController(_inputService, _dispatcher, _logger);
     }
 
     public static void Main()
@@ -50,8 +50,6 @@ public class Program
 
     public void Run()
     {
-        BindCommands();
-        
         foreach (var entry in _configService.TableConfig.Items)
         {
             if (entry.Amount > 0)
@@ -60,17 +58,7 @@ public class Program
             }
         }
 
-        _inputController.ShowCommandMenuAndExecute();
-    }
-
-    private void BindCommands()
-    {
-        _dispatcher.Register(CommandNames.ShowItemTypes, new ShowItemTypesCommand(_logger,_configService.AllItemTypes.ToList()));
-        _dispatcher.Register(CommandNames.AddToHero, new AddItemToInventoryCommand(_heroInventory));
-        _dispatcher.Register(CommandNames.TakeFromTable, new TakeItemFromTableCommand(_heroInventory, _tableInventory, _logger));
-        _dispatcher.Register(CommandNames.GiveToTable, new GiveToTableCommand(_heroInventory, _tableInventory, _logger));
-        _dispatcher.Register(CommandNames.ShowInventories, new ShowInventoriesCommand(_heroInventory, _tableInventory, _printer));
-        _dispatcher.Register(CommandNames.Exit, new ExitCommand(_logger));
-        _dispatcher.Register(CommandNames.Empty, new EmptyCommand(_logger));
+        _dispatcher.PrintMenu();
+        _inputService.StartInputLoop();
     }
 }
